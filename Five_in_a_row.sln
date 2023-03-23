@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Five_in_a_row", "Five_in_a_
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GobangLibrary", "GobangLibrary\GobangLibrary.csproj", "{CD787DB8-9941-4823-AABD-AB05AD54C996}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GobangLibrary.Extension", "GobangLibrary.Extension\GobangLibrary.Extension.csproj", "{EFCF719C-A58F-42EB-BF08-05E1C27B26B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GobangLibrary.Extension", "GobangLibrary.Extension\GobangLibrary.Extension.csproj", "{EFCF719C-A58F-42EB-BF08-05E1C27B26B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

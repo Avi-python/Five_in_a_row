@@ -121,21 +121,23 @@ namespace Five_in_a_row
         }
         private void login_Click(object sender, EventArgs e)
         {
+            // 嘗試連接
+            int tmpPort;
+            IPAddress tmpServerIp;
+            if (!textBox2.Text.ToPort(out tmpPort))
+            {
+                system_text.Text = "無效埠口";
+            }
+            else setPortNumber = false;
+            if (!textBox1.Text.ToServerIP(out tmpServerIp))
+            {
+                system_text.Text = "無效IP";
+            }
+            else setServerIp = false;
+            // 還有一個階段
             if (setPlayerName && setPortNumber && setServerIp)
             {
-                // 嘗試連接
-                int tmpPort;
-                IPAddress tmpServerIp;
-                if (!textBox2.Text.ToPort(out tmpPort))
-                {
-                    system_text.Text = "無效埠口";
-                }
-                if(!textBox1.Text.ToServerIP(out tmpServerIp))
-                {
-                    system_text.Text = "無效IP";
-                }
-
-                if (GM.setUp(tmpServerIp, tmpPort, textBox2.Text))
+                if (GM.SetUp(tmpServerIp, tmpPort, textBox2.Text))
                 {
                     draw();
                     IsConnected = true;
@@ -145,7 +147,7 @@ namespace Five_in_a_row
             }
             else
             {
-                system_text.Text = "尚未輸入完全";
+                //system_text.Text = "尚未輸入完全";
             }
         }
         private void Reset_Click(object sender, EventArgs e)
@@ -165,22 +167,22 @@ namespace Five_in_a_row
             //system_text.Text = textBox1.Text;
             // 可以設計更多，或許可以偵測IP格式對不對
             if (textBox1.Text != "") setServerIp = true;
-            else                     setServerIp = false;
+            else setServerIp = false;
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
             //system_text.Text = textBox2.Text;
-            if(textBox2.Text != "") setPortNumber = true;
-            else                    setPortNumber = false; 
-            
+            if (textBox2.Text != "") setPortNumber = true;
+            else setPortNumber = false;
+
         }
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
             //system_text.Text = textBox3.Text;
             // 可以設計更多，或許可以偵測名子對不對
             if (textBox3.Text != "") setPlayerName = true;
-            else                     setPlayerName = false;
+            else setPlayerName = false;
         }
 
         private void label3_Click(object sender, EventArgs e)

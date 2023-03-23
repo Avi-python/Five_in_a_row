@@ -1,4 +1,5 @@
 using GobangLibrary;
+using TCP_Client;
 
 namespace Five_in_a_row
 {
@@ -14,10 +15,15 @@ namespace Five_in_a_row
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            Form1 F1 = new Form1();
-            Application.Run(F1);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new Form2());
 
-            GameManager GM = new GameManager(F1);
+            Form1 F1 = new Form1();
+            Form2 F2 = new Form2();
+            //Application.Run(F1);
+
+            GameManager GM = new GameManager(F1, F2);
             
         }
     }
