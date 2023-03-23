@@ -21,4 +21,4 @@ D:\Uni_programming\Uni_CSharp\Project\Five_in_a_row\Five_in_a_row\obj\Debug\net6
 D:\Uni_programming\Uni_CSharp\Project\Five_in_a_row\Five_in_a_row\obj\Debug\net6.0-windows\ref\Five_in_a_row.dll
 D:\Uni_programming\Uni_CSharp\Project\Five_in_a_row\Five_in_a_row\bin\Debug\net6.0-windows\GobangLibrary.Extension.dll
 D:\Uni_programming\Uni_CSharp\Project\Five_in_a_row\Five_in_a_row\bin\Debug\net6.0-windows\GobangLibrary.Extension.pdb
-D:\Uni_programming\Uni_CSharp\Project\Five_in_a_row\Five_in_a_row\obj\Debug\net6.0-windows\TCP_Client.Form2.resources
+D:\Uni_programming\Uni_CSharp\Project\Five_in_a_row\Five_in_a_row\obj\Debug\net6.0-windows\Five_in_a_row.Form2.resources

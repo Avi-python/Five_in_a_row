@@ -5,7 +5,7 @@ using System.Net;//匯入網路通訊協定相關函數
 using System.Net.Sockets;//匯入網路插座功能函數
 using System.Threading;//匯入多執行緒功能函數
 
-namespace TCP_Client
+namespace Five_in_a_row
 {
     public partial class Form2 : Form
     {
@@ -38,8 +38,11 @@ namespace TCP_Client
                     ListBox1.Items.Clear();//清除線上名單
                     MessageBox.Show("伺服器斷線了！");//顯示斷線
                     Button1.Enabled = true;//連線按鍵恢復可用
+
+                    // 這邊要處理
+
                     //Thread.Abort();//刪除執行緒，現在這個用不了
-                    Thread.Interrupt();
+                    //Thread.Interrupt();
                 }
                 Msg = Encoding.Default.GetString(Byte, 0, ByteLength); //解讀完整訊息
                 Cmd = Msg.Substring(0, 1); //取出命令碼 (第一個字)
@@ -65,10 +68,10 @@ namespace TCP_Client
                         TextBox1.ScrollToCaret();//捲動到游標位置
                         break;
                     case "3"://來自server
-                        TextBox4.Text +=  Str + "\r\n";//顯示訊息並換行
+                        TextBox4.Text += Str + "\r\n";//顯示訊息並換行
                         TextBox1.SelectionStart = TextBox1.Text.Length;//游標移到最後
                         TextBox1.ScrollToCaret();//捲動到游標位置
-                        break;  
+                        break;
                 }
             }
         }
@@ -108,7 +111,7 @@ namespace TCP_Client
                 Client.Connect(EP); //連上伺服器的端點EP(類似撥號給電話總機)
                 Thread = new Thread(Listen); //建立監聽執行緒
                 Thread.IsBackground = true; //設定為背景執行緒
-                Thread.Start(); //開始監聽
+                Thread.Start(); //開始監聽;
                 TextBox4.Text = "已連線伺服器！" + "\r\n";
                 Send("0" + User);  //連線後隨即傳送自己的名稱給伺服器
             }
@@ -139,5 +142,7 @@ namespace TCP_Client
         {
 
         }
+
+       
     }
 }

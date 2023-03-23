@@ -1,5 +1,4 @@
 using GobangLibrary;
-using TCP_Client;
 
 namespace Five_in_a_row
 {
@@ -14,7 +13,6 @@ namespace Five_in_a_row
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form2());

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using GobangLibrary;
 using System.Net;
-using TCP_Client;
 
 namespace Five_in_a_row
 {
+    
     public class GameManager
     {
         private Table? _table; // 自己處理，Server只負責傳遞指令
@@ -21,27 +21,17 @@ namespace Five_in_a_row
         private string ServerIP; 
         private int PortNumber;
         private int[] PlayerSet = new int[2]; // {xRow, yCol}
+        private static Form1? _form1 = null;
         public GameManager(Form1 form1, Form2 form2) // 流程上，會在本地端建立一個GameManager，由他控制流程
         {
             // 先登入
-            Application.Run(form1); 
+            _form1 = form1;
+            Application.Run(_form1);
+            
             //InitLocalPlayer(); // 建立本地端玩家
             //InitTable(); // 建立一個table
         }
 
-        public bool SetUp(IPAddress serverIp, int portNumber, string userName)
-        {
-
-
-            // Server發回開始的尋息後
-
-            // 循環
-            // 如果得到結束資訊就跳出。
-            // 下棋，回傳資訊給Server。
-            // 贏了要傳結束資訊。
-            //
-            return false;
-        }
 
         private void loop()
         {
