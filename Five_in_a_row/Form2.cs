@@ -143,6 +143,9 @@ namespace Five_in_a_row
 
         }
 
-       
+        private void TextBox5_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using GobangLibrary;
 using System.Net;
+using System.Globalization;
 
 namespace Five_in_a_row
 {
@@ -31,6 +32,18 @@ namespace Five_in_a_row
             //InitLocalPlayer(); // 建立本地端玩家
             //InitTable(); // 建立一個table
         }
+
+        public static void img_alpha(Bitmap src, int alpha)
+        {
+            for(int h = 0; h < src.Height; h++)
+            {
+                for(int w = 0; w < src.Width; w++)
+                {
+                    Color c = src.GetPixel(h, w);
+                    src.SetPixel(w, h, Color.FromArgb(alpha, c.R, c.G, c.B));
+                }
+            }
+        }       
 
 
         private void loop()

@@ -18,16 +18,18 @@ namespace Five_in_a_row
         private int CurrentY; //�����bplate�x�}�̪�y�y��
         private bool IsWhite = true; //�����{�b�O�_�O�զ��
         private bool IsOver = false; //�����{�b�O�_����C��
-        private bool IsConnected = false; //���U'�n�����A��'�o��button��A�|�ܦ�true
+        private bool PlayChessEnable = false; //���U'�n�����A��'�o��button��A�|�ܦ�true
         private bool IsXok = false; //�P�_�ƹ��b�ѽL�W�I����X�y�ЬO�_�b�I�I�W
         private bool IsYok = false; //�P�_�ƹ��b�ѽL�W�I����Y�y�ЬO�_�b�I�I�W
         private bool setServerIp = false;
         private bool setPortNumber = false;
         private bool setPlayerName = false;
+        Graphics gme;
 
         Socket Client;//通訊物件
         Thread Thread;//網路監聽執行緒
         string User;//使用者
+        string EnemyName;
 
         private static GameManager GM;
 
@@ -45,22 +47,22 @@ namespace Five_in_a_row
             return textBox3.Text;
         }
 
-        private void draw()
+        private void draw(int alpha = 100)
         {
             Graphics g = Graphics.FromImage(myImage);
             g.Clear(this.BackColor);
-            g.FillRectangle(Brushes.PaleGoldenrod, new Rectangle(new Point(12, 12), new Size(450, 450)));
+            g.FillRectangle(new SolidBrush(Color.FromArgb(alpha, Color.PaleGoldenrod)), new Rectangle(new Point(12, 12), new Size(450, 450)));
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    g.DrawRectangle(new Pen(Brushes.Black), i * 50 + 12, j * 50 + 12, 50, 50);
+                    g.DrawRectangle(new Pen(new SolidBrush(Color.FromArgb(alpha, Color.Black))), i * 50 + 12, j * 50 + 12, 50, 50);
                 }
             }
             Graphics gg = Plate.CreateGraphics();
             gg.DrawImage(myImage, 0, 0);
+            gme = gg;
         }
-
         private void DrawChess(Graphics g, int x, int y, Pen p, Brush brush, int flag)
         {
             CurrentX = x;
@@ -69,16 +71,36 @@ namespace Five_in_a_row
             g.DrawEllipse(p, x * 50, y * 50, 25, 25);
             g.FillEllipse(brush, x * 50, y * 50, 25, 25);
         }
+        private void DrawChess(int x, int y, Pen p, Brush brush, int flag)
+        {
+            CurrentX = x;
+            CurrentY = y;
+            plate[x, y] = flag; //flag==1 �զ�ѡAflag==2 �¦��
+            gme.DrawEllipse(p, x * 50, y * 50, 25, 25);
+            gme.FillEllipse(brush, x * 50, y * 50, 25, 25);
+        }
 
+        private void DrawAllChess()
+        {
+            for (int i = 0; i < plate.GetLength(0); i++)
+            {
+                for (int j = 0; j < plate.GetLength(1); j++)
+                {
+                    if (plate[i, j] == 1) DrawChess(i, j, new Pen(Brushes.White), Brushes.White, 1);
+                    else if (plate[i, j] == 2) DrawChess(i, j, new Pen(Brushes.Black), Brushes.Black, 2);
+                }
+            }
+        }
         private void Plate_MouseClick(object sender, MouseEventArgs e)
         {
-            if (IsConnected)
+            TextBox5.ReadOnly = true; // 玩家要下棋的時候禁止
+            if (PlayChessEnable)
             {
                 if (IsOver)
                 {
                     return;
                 }
-                Graphics g = Plate.CreateGraphics();
+                //Graphics g = Plate.CreateGraphics();
                 //�u�n�ƹ��U�b�I�I�y�Ъ����t10�H���A���i�H���\�U��
                 int x = (e.X - 10) % 50;
                 int y = (e.Y - 10) % 50;
@@ -102,72 +124,42 @@ namespace Five_in_a_row
                     y = (e.Y - 10) / 50;
                     IsYok = true;
                 }
-                if (IsYok == true && IsXok == true)
+                if (IsYok == true && IsXok == true) //點擊位置有沒有正確
                 {
                     if (x >= 0 && x < 10 && y >= 0 && y < 10 && plate[x, y] == 0)
                     {
-                        system_text.Text = "";
                         if (IsWhite)
                         {
-                            DrawChess(g, x, y, new Pen(Brushes.White), Brushes.White, 1);
-                            IsWhite = false;
+                            DrawChess(x, y, new Pen(Brushes.White), Brushes.White, 1);
+                            //IsWhite = false;
                             //�o��n�[�P�_Ĺ�F�S��function�ӧP�_�n���n����
                         }
                         else
                         {
-                            DrawChess(g, x, y, new Pen(Brushes.Black), Brushes.Black, 2);
-                            IsWhite = true;
+                            DrawChess(x, y, new Pen(Brushes.Black), Brushes.Black, 2);
+                            //IsWhite = true;
                             //�o��n�[�P�_Ĺ�F�S��function�ӧP�_�n���n����
                         }
+                        Send(User + "|" + $"{x},{y}", "4");
+                        TextBox5.ReadOnly = false; //可以傳訊息
+                        PlayChessEnable = false;
                     }
                 }
                 else
                 {
-                    system_text.Text = "請點擊正確位置";
+                    textBox4Controller("(無效)", "請點擊正確位置");
                 }
                 IsXok = false;
                 IsYok = false;
             }
         }
-        //private void login_Click(object sender, EventArgs e) // 交給Form2處理
-        //{
-        //    嘗試連接
-        //    int tmpPort;
-        //    IPAddress tmpServerIp;
-        //    if (!textBox2.Text.ToPort(out tmpPort))
-        //    {
-        //        system_text.Text = "無效埠口";
-        //    }
-        //    else setPortNumber = false;
-        //    if (!textBox1.Text.ToServerIP(out tmpServerIp))
-        //    {
-        //        system_text.Text = "無效IP";
-        //    }
-        //    else setServerIp = false;
-        //    還有一個階段
-        //    if (setPlayerName && setPortNumber && setServerIp)
-        //    {
-        //        if (GM.SetUp(tmpServerIp, tmpPort, textBox2.Text))
-        //        {
-        //            draw();
-        //            IsConnected = true;
-        //            Reset.Enabled = true; // true 打開 reset button，應該要在正式開始遊戲的時候才enable
-        //            system_text.Text = "登入伺服器";
-        //        }
-        //    }
-        //    else
-        //    {
-        //        system_text.Text = "尚未輸入完全";
-        //    }
-        //}
         private void Reset_Click(object sender, EventArgs e)
         {
-            IsOver = false;
-            IsWhite = true;
-            draw();
-            plate = new int[10, 10];
+            //IsOver = false;
+            //IsWhite = true;
+            //draw();
+            //plate = new int[10, 10];
         }
-
         private void Plate_Paint(object sender, PaintEventArgs e)
         {
 
@@ -179,7 +171,6 @@ namespace Five_in_a_row
             if (textBox1.Text != "") setServerIp = true;
             else setServerIp = false;
         }
-
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
             //system_text.Text = textBox2.Text;
@@ -194,15 +185,26 @@ namespace Five_in_a_row
             if (textBox3.Text != "") setPlayerName = true;
             else setPlayerName = false;
         }
-
         private void label3_Click(object sender, EventArgs e)
         {
 
         }
-
         private void system_text_TextChanged(object sender, EventArgs e)
         {
 
+        }
+        private void textBox4Controller(string type, string message)
+        {
+            TextBox4.Text += type + message + "\r\n";//顯示訊息並換行
+            TextBox4.SelectionStart = TextBox4.Text.Length; //游標移到最後
+            TextBox4.ScrollToCaret(); //捲動到游標位置
+        }
+
+        private void systemTextController(string type, string message)
+        {
+            system_text.Text += type + message + "\r\n";//顯示訊息並換行
+            system_text.SelectionStart = system_text.Text.Length; //游標移到最後
+            system_text.ScrollToCaret(); //捲動到游標位置
         }
 
         #region InterNet Component
@@ -247,27 +249,67 @@ namespace Five_in_a_row
                         }
                         break;
                     case "1"://接收廣播訊息
-                        TextBox4.Text += "(公開)" + Str + "\r\n";//顯示訊息並換行
-                        TextBox4.SelectionStart = TextBox4.Text.Length; //游標移到最後
-                        TextBox4.ScrollToCaret(); //捲動到游標位置
+                        textBox4Controller("(公開)", Str);
                         break;
                     case "2"://接收私密訊息
-                        TextBox4.Text += "(私密)" + Str + "\r\n";//顯示訊息並換行
-                        TextBox4.SelectionStart = TextBox4.Text.Length;//游標移到最後
-                        TextBox4.ScrollToCaret();//捲動到游標位置
+                        textBox4Controller("(私密)", Str);
                         break;
                     case "3"://來自server
-                        if (Str == "你是先手") 
-                        TextBox4.Text += Str + "\r\n";//顯示訊息並換行
-                        TextBox4.SelectionStart = TextBox4.Text.Length;//游標移到最後
-                        TextBox4.ScrollToCaret();//捲動到游標位置
+                        String[] msg = Str.Split("|");
+                        string prior = msg[0];
+                        EnemyName = msg[1];
+                        systemTextController("(消息)", "你的敵人是: " + EnemyName);
+                        if (prior == "你是先手")
+                        {
+                            draw(100);
+                            IsWhite = true;
+                            textBox4Controller("(流程)", "It's Your Turn.");
+                            PlayChessEnable = true;
+                        }
+                        else
+                        {
+                            draw(100);
+                            IsWhite = false;
+                        }
+
+                        textBox4Controller("", Str);
                         break;
+                    case "4": // 接收來自對方的訊息
+                        String[] Coordinate = Str.Split(",");
+                        int enX = int.Parse(Coordinate[0]);
+                        int enY = int.Parse(Coordinate[1]);
+                        if (IsWhite)
+                        {
+                            DrawChess(enX, enY, new Pen(Brushes.Black), Brushes.Black, 2);
+                            plate[enX, enY] = 2;
+                        }
+                        else
+                        {
+                            DrawChess(enX, enY, new Pen(Brushes.White), Brushes.White, 1);
+                            plate[enX, enY] = 1;
+                        }
+
+                        textBox4Controller("(流程)", "It's Your Turn.");
+                        PlayChessEnable = true;
+                        break;
+
+                    case "5": // Server說等待
+                        //Graphics g = Plate.CreateGraphics();
+                        //DrawAllChess(g);
+                        textBox4Controller("(流程)", Str);
+                        PlayChessEnable = false;
+                        break;
+
+                    case "6":
+                        systemTextController("(敵人):", Str);
+                        break;
+
                 }
             }
         }
-        private void Send(string Str)
+        private void Send(string Str, string type = "")
         {
-            byte[] B = Encoding.Default.GetBytes(Str); //翻譯文字為Byte陣列
+            byte[] B = Encoding.Default.GetBytes(type + Str); //翻譯文字為Byte陣列
             Client.Send(B, 0, B.Length, SocketFlags.None); //使用連線物件傳送資料
         }
 
@@ -289,7 +331,7 @@ namespace Five_in_a_row
                 Thread.IsBackground = true; //設定為背景執行緒
                 Thread.Start(); //開始監聽;
                 TextBox4.Text = "已連線伺服器！" + "\r\n";
-                //TextBox4.Text = "等待伺服器傳達訊息..." + "\r\n";
+                button1.Enabled = false;
                 Send("0" + User);  //連線後隨即傳送自己的名稱給伺服器
             }
             catch (Exception)
@@ -306,7 +348,7 @@ namespace Five_in_a_row
         {
             if (button1.Enabled == false)
             {
-                Send("9" + User); //傳送自己的離線訊息給伺服器
+                Send(User, "9"); //傳送自己的離線訊息給伺服器
                 Client.Close(); //關閉網路通訊器
             }
         }
@@ -316,6 +358,31 @@ namespace Five_in_a_row
         private void TextBox4_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TextBox5_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TextBox5_KeyDown(object sender, KeyEventArgs e)
+        { 
+            if (e.KeyCode == Keys.Enter && TextBox5.Text != "")
+            { 
+                systemTextController($"to:{label3.Text}", TextBox5.Text);
+                Send(User + "|" + TextBox5.Text, "6");
+                TextBox5.Clear();
+            }
         }
     }
 }

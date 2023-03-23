@@ -190,6 +190,7 @@
             TextBox5.Name = "TextBox5";
             TextBox5.Size = new Size(494, 22);
             TextBox5.TabIndex = 99;
+            TextBox5.TextChanged += TextBox5_TextChanged;
             // 
             // Form2
             // 
