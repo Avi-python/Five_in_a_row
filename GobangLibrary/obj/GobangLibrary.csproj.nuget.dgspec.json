@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Uni_programming\\Uni_CSharp\\Project\\Five_in_a_row\\GobangLibrary\\GobangLibrary.csproj": {}
+    "D:\\Uni_programming\\Uni_CSharp\\Project\\五子棋\\Client\\GobangLibrary\\GobangLibrary.csproj": {}
   },
   "projects": {
-    "D:\\Uni_programming\\Uni_CSharp\\Project\\Five_in_a_row\\GobangLibrary\\GobangLibrary.csproj": {
+    "D:\\Uni_programming\\Uni_CSharp\\Project\\五子棋\\Client\\GobangLibrary\\GobangLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Uni_programming\\Uni_CSharp\\Project\\Five_in_a_row\\GobangLibrary\\GobangLibrary.csproj",
+        "projectUniqueName": "D:\\Uni_programming\\Uni_CSharp\\Project\\五子棋\\Client\\GobangLibrary\\GobangLibrary.csproj",
         "projectName": "GobangLibrary",
-        "projectPath": "D:\\Uni_programming\\Uni_CSharp\\Project\\Five_in_a_row\\GobangLibrary\\GobangLibrary.csproj",
+        "projectPath": "D:\\Uni_programming\\Uni_CSharp\\Project\\五子棋\\Client\\GobangLibrary\\GobangLibrary.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\Uni_programming\\Uni_CSharp\\Project\\Five_in_a_row\\GobangLibrary\\obj\\",
+        "outputPath": "D:\\Uni_programming\\Uni_CSharp\\Project\\五子棋\\Client\\GobangLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

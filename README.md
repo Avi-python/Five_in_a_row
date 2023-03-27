@@ -27,7 +27,7 @@
 ### 3:Server訊息
 - 你是先手 + 對手消息
 - 你是後手 + 對手消息
-- 勝利消息
+- 勝利消息 + 同樣也要刪調房間
 
 ### 4:User -> Server
 - Server控管換誰下棋
@@ -37,5 +37,14 @@
 ### 5:Server -> User 
 - 等待
 
-### 6:Server -> enemt
+### 6:User <-> Server <-> User
 - 互相傳送的消息
+
+### 7:Rematch User->Server
+- 把傳過來的User重新加入排隊列中
+### 8:勝利消息
+- User 傳的那一方就代表他贏了
+- User 收的那一方就代表他輸了
+### 9:
+- Server -> User : 表示你的敵人中離了
+- User -> Server : 該User中離(關掉視窗)

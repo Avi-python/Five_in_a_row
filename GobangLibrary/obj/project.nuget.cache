@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "z2Xnuf2o4NDpDb7INpwhONm726uv5SFwYxX76A6ZsFAaLHkaPBSc09IDJzKtWoHKmvqELFM7N+CkrSYLSWkhaA==",
+  "dgSpecHash": "Xpsmwq99qXWquzRLit2lm2FfoNkEAv8cxT/H9EW5823+idZh2jsWU6antWSRErqIzyxpV3pNEPzOfTugqcyz0w==",
   "success": true,
-  "projectFilePath": "D:\\Uni_programming\\Uni_CSharp\\Project\\Five_in_a_row\\GobangLibrary\\GobangLibrary.csproj",
+  "projectFilePath": "D:\\Uni_programming\\Uni_CSharp\\Project\\五子棋\\Client\\GobangLibrary\\GobangLibrary.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
