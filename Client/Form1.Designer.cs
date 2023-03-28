@@ -153,9 +153,9 @@
             // button1
             // 
             button1.Font = new Font("Microsoft JhengHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(553, 193);
+            button1.Location = new Point(552, 193);
             button1.Name = "button1";
-            button1.Size = new Size(115, 28);
+            button1.Size = new Size(115, 39);
             button1.TabIndex = 16;
             button1.Text = "Login\r\n";
             button1.UseVisualStyleBackColor = true;
@@ -190,9 +190,9 @@
             label3.Font = new Font("Microsoft JhengHei UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
             label3.Location = new Point(12, 612);
             label3.Name = "label3";
-            label3.Size = new Size(52, 19);
+            label3.Size = new Size(45, 19);
             label3.TabIndex = 103;
-            label3.Text = "Send :";
+            label3.Text = "Send";
             // 
             // Form1
             // 

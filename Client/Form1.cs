@@ -89,7 +89,7 @@ namespace Five_in_a_row
 
         private void DrawPlate()
         {
-            gme.FillRectangle(new SolidBrush(Color.FromArgb(255, Color.PaleGoldenrod)), new Rectangle(new Point(_plateXStart, _plateYStart), new Size(450, 450)));
+            gme.FillRectangle(new SolidBrush(Color.FromArgb(255, Color.PaleGoldenrod)), new Rectangle(new Point(0, 0), new Size(510, 510)));
         }
 
         #endregion
@@ -256,19 +256,25 @@ namespace Five_in_a_row
                     Client.Close();//關閉s通訊器
                     listBox1.Items.Clear();//清除線上名單
                     MessageBox.Show("伺服器斷線了！");//顯示斷線
-                    button1.Enabled = true;//連線按鍵恢復可用
-                    Reset.Enabled = false;
-                    ResetBoard();
-                    // 因為等一下再次連接到玩家之後，就會再次出現
 
-                    // 這邊要處理
+                    system_text.Text = "";
+                    TextBox4.Text = "";
+
+                    button1.Enabled = true;//連線按鍵恢復可用
+                    textBox1.Enabled = true;//可以改伺服器ip、port
+                    textBox2.Enabled = true;
+                    TextBox5.Enabled = false;
+                    Reset.Enabled = false;
+
+                    ResetBoard();
+                    DrawPlate();
 
                     endTrigger = false;
                     break;
                     //Thread.Abort();//刪除執行緒，現在這個用不了
-                    //Thread.Interrupt();
                 }
-                Msg = Encoding.Default.GetString(Byte, 0, ByteLength); //解讀完整訊息
+                Msg = Encoding.Unicode.GetString(Byte, 0, ByteLength); //解讀完整訊息'
+                //textBox4Controller("", Msg);
                 Cmd = Msg.Substring(0, 1); //取出命令碼 (第一個字)
                 Str = Msg.Substring(1); //取出命令碼之後的訊息   
                 switch (Cmd)//依命令碼執行功能
@@ -283,26 +289,26 @@ namespace Five_in_a_row
                         break;
                     case "1"://接收廣播訊息
                         splitter = Str.Split("|");
-                        systemTextController("(公開)", splitter[0] + " by: " + splitter[1]);
+                        systemTextController("(public)", splitter[0] + " by: " + splitter[1]);
                         break;
                     case "2"://接收私密訊息
-                        systemTextController("(私密)", Str);
+                        systemTextController("(private)", Str);
                         break;
                     case "3"://來自server
                         String[] msg = Str.Split("|");
                         string prior = msg[0];
                         EnemyName = msg[1];
-                        systemTextController("(消息)", "你的敵人是: " + EnemyName);
-                        if (prior == "你是先手")
+                        systemTextController("(News)", "Your enemy: " + EnemyName);
+                        if (prior == "001")
                         {
                             draw(100);
-                            textBox4Controller("(流程)", "你是先手, It's Your Turn.");
+                            textBox4Controller("(Process)", "You are First, It's Your Turn.");
                             PlayChessEnable = true;
                         }
                         else
                         {
                             draw(100);
-                            textBox4Controller("(流程)", "你是後手, Wait");
+                            textBox4Controller("(Process)", "You are Second, Wait");
                         }
 
                         break;
@@ -314,19 +320,19 @@ namespace Five_in_a_row
                         DrawChess(enX, enY, new Pen(Brushes.Black), Brushes.Black, 2);
                         plate[enX, enY] = 2;
 
-                        textBox4Controller("(流程)", "It's Your Turn.");
+                        textBox4Controller("(Process)", "It's Your Turn.");
                         PlayChessEnable = true;
                         break;
 
                     case "5": // Server說等待
                         //Graphics g = Plate.CreateGraphics();
                         //DrawAllChess(g);
-                        textBox4Controller("(流程)", Str);
+                        textBox4Controller("(Process)", Str);
                         PlayChessEnable = false;
                         break;
 
                     case "6":
-                        systemTextController("(敵人):", Str);
+                        systemTextController("(Enemy):", Str);
                         break;
 
                     case "7":
@@ -335,8 +341,8 @@ namespace Five_in_a_row
                         break;
 
                     case "8":
-                        textBox4Controller("(消息)", "敵人獲勝");
-                        MessageBox.Show("You loss!!!\nPlease Click \"Reset\" Button to Go Next Game");
+                        textBox4Controller("(News)", "Enemy Win!!!");
+                        MessageBox.Show("You loss !!!\nPlease Click \"Reset\" Button to Go Next Game");
                         Reset.Enabled = true;
                         PlayChessEnable = false;
                         // 要做一點事情
@@ -344,7 +350,7 @@ namespace Five_in_a_row
                         break;
 
                     case "9":
-                        textBox4Controller("(消息)", "你的敵人中離，已將你重新加入配對佇列");
+                        textBox4Controller("(News)", "Your Enemy has leave，Already push you to the waiting Queue.");
                         PlayChessEnable = false;
                         ResetBoard();
                         DrawPlate();
@@ -355,7 +361,7 @@ namespace Five_in_a_row
         }
         private void Send(string Str, string type = "")
         {
-            byte[] B = Encoding.Default.GetBytes(type + Str); //翻譯文字為Byte陣列
+            byte[] B = Encoding.Unicode.GetBytes(type + Str); //翻譯文字為Byte陣列
             Client.Send(B, 0, B.Length, SocketFlags.None); //使用連線物件傳送資料
         }
 
@@ -365,7 +371,6 @@ namespace Five_in_a_row
             if (ReferenceEquals(User, null)) User = textBox3.Text;//使用者名稱, 代表打上去按下按鍵後就沒有辦法改名了
             if (setPlayerName && setPortNumber && setServerIp)
             {
-                textBox3.Enabled = false; //禁止再改名
                 //這邊要做除錯
                 string IP = textBox1.Text;//伺服器IP
                 int Port = int.Parse(textBox2.Text);//伺服器Port
@@ -379,7 +384,13 @@ namespace Five_in_a_row
                     Thread.IsBackground = true; //設定為背景執行緒
                     Thread.Start(); //開始監聽;
                     TextBox4.Text = "已連線伺服器！" + "\r\n";
+
+                    textBox1.Enabled = false;
+                    textBox2.Enabled = false;
+                    textBox3.Enabled = false; //禁止再改名
                     button1.Enabled = false;
+                    TextBox5.Enabled = true; // 開放對話
+
                     Send("0" + User);  //連線後隨即傳送自己的名稱給伺服器
                 }
                 catch (Exception)
@@ -440,7 +451,7 @@ namespace Five_in_a_row
                     }
                     catch
                     {
-                        systemTextController("(系統)", "格式錯誤，無法發送!!!");
+                        systemTextController("(System)", "Wrong Format，cannot Send!!!");
                     }
                 }
                 else
@@ -451,6 +462,5 @@ namespace Five_in_a_row
                 }
             }
         }
-
     }
 }
